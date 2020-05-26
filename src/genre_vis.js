@@ -90,14 +90,15 @@ export default class GenreVis {
     svg.append('image')
       .attr('href', 'src/assets/spines/book12.png')
       .attr('class', 'book-spine')
-      .attr('x', 642).attr('y', 215)
-      .attr('transform', 'rotate(40, 642, 215)')
+      .attr('x', 637).attr('y', 215)
+      .attr('transform', 'rotate(40, 637, 215)')
       .attr('width', 80).attr('height', 290)
       .data([books])
 
     d3.selectAll('.book-spine')
       .on('click', (d) => {
-        new BookData(d).createBook();
+        console.log(d[d.length - 1])
+        new BookData(d[d.length - 1], d.slice(d.length - 1)).createBook();
       })
     
     svg.append('image')

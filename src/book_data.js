@@ -1,6 +1,7 @@
 export default class BookData {
-  constructor(books) {
-    this.data = books;
+  constructor(book, data) {
+    this.book = book;
+    this.data = data;
   }
 
   removeBook() {
@@ -25,9 +26,9 @@ export default class BookData {
     const backCover = document.createElement('span');
     backCover.classList.add('cover');
     book.appendChild(backCover);
-    let lastPage = document.createElement('span');
-    lastPage.classList.add('page');
-    book.appendChild(lastPage);
+    let firstPage = document.createElement('span');
+    firstPage.classList.add('page', 'first');
+    book.appendChild(firstPage);
     const frontCover = document.createElement('span');
     frontCover.classList.add('cover', 'turn');
     book.appendChild(frontCover);
@@ -35,8 +36,18 @@ export default class BookData {
     bookContainer.addEventListener('click', e => e.stopPropagation());
     body.appendChild(bookContainer);
     setTimeout(() => document.addEventListener('click', () => {
-      console.log('clicked')
       this.removeBook();
     }, { once: true }), 500)
+    this.fillBook();
+  }
+
+  fillBook() {
+    const page1 = document.querySelector('.book > .first');
+    const title = document.createElement('h1');
+    title.innerHTML = this.book.volumeInfo.title;
+    page1.appendChild(title);
+    const desc = document.createElement('p');
+    desc.innerHTML = this.book.volumeInfo.description;
+    page1.appendChild(desc);
   }
 }

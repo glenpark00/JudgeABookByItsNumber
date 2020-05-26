@@ -15,6 +15,7 @@ export default class GenreBooks {
       requests.push(axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${this.genre}&maxResults=40&startIndex=${num}`));
       num += 40;
     }
+    requests.push(axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:9780385333481`))
     await axios.all(requests)
       .then(axios.spread((...response) => {
         response.map(res => {
