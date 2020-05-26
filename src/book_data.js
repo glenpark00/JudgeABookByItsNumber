@@ -1,5 +1,3 @@
-import * as d3 from 'd3';
-
 export default class BookData {
   constructor(books) {
     this.data = books;
@@ -34,10 +32,11 @@ export default class BookData {
     frontCover.classList.add('cover', 'turn');
     book.appendChild(frontCover);
     bookContainer.appendChild(book);
-    // bookContainer.addEventListener('click', e => e.stopPropagation());
+    bookContainer.addEventListener('click', e => e.stopPropagation());
     body.appendChild(bookContainer);
-    document.querySelector('.svg-background').addEventListener('click', () => {
+    setTimeout(() => document.addEventListener('click', () => {
+      console.log('clicked')
       this.removeBook();
-    }, { once: true })
+    }, { once: true }), 500)
   }
 }

@@ -25,18 +25,27 @@ svg {
 }
 
 @keyframes bringDownSlow {
-  0%   {top: -5%;}
-  100% {top: 0%;}
+  0%   {top: 0%;}
+  100% {top: 5%;}
+}
+
+.book-container {
+  position: absolute;
+  top: 0;
+  right: 52%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 72%;
+  animation: bringDownSlow 2s forwards;
 }
 
 .book {
-  position: absolute;
-  right: 20%;
   width: 100%;
-  height: 80%;
+  height: 100%;
   margin: auto;
   perspective: 70rem;
-  animation: bringDownSlow 2s forwards;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,14 +58,16 @@ svg {
 .cover {
   background-color: #800022;
   transform: rotateY(0deg);
-  width: 500px;
-  height: 575px;
+  width: 100%;
+  height: 100%;
 }
 .page {
+  top: 5%;
+  left: 5%;
   background-color: #e9e6c4;
   transform: rotateY(0deg);
-  width: 425px;
-  height: 525px;
+  width: 95%;
+  height: 90%;
   text-align: right;
   font-size: 8px;
   color: #777;
