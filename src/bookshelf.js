@@ -1,31 +1,20 @@
 import * as d3 from 'd3';
-import BookData from './book_data';
+import Books from './books';
+import Search from './search';
 
-export default class GenreVis {
+export default class Bookshelf {
   constructor(data) {
     this.data = data;
   }
 
-  shuffleBooks(length) {
-    let indices = [...Array(length).keys()];
-    for (let i = length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      let temp = indices[i];
-      indices[i] = indices[j];
-      indices[j] = temp;
-    }
-    return indices.map(i => i + 1);
-  }
-
-  renderBook() {
+  constructBookshelf() {
     const container = document.getElementById('svg-container');
     const width = container.offsetWidth;
     const height = container.offsetHeight;
     d3.select('#svg-container').append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet')
-    const books = this.data.books;
     let svg = d3.select('svg');
-
+  
     // Create the background (brown)
     svg.append('rect')
       .attr('class', 'svg-background')
@@ -50,69 +39,95 @@ export default class GenreVis {
       .attr('x1', 410).attr('y1', 0)
       .attr('x2', 410).attr('y2', 800)
       .attr('stroke', '#6D4527').attr('stroke-width', 10)
-
+  
     // Create the right shelves
     svg.append('line')
       .attr('x1', 430).attr('y1', 120)
       .attr('x2', 1800).attr('y2', 120)
       .attr('stroke', '#D7984D').attr('stroke-width', 30) 
-
+  
     svg.append('line')
       .attr('x1', 430).attr('y1', 500)
       .attr('x2', 1800).attr('y2', 500)
       .attr('stroke', '#D7984D').attr('stroke-width', 30) 
-
+  
     // Create the left shelves
     svg.append('line')
       .attr('x2', 0).attr('y2', 70)
       .attr('x1', 380).attr('y1', 70)
       .attr('stroke', '#D7984D').attr('stroke-width', 30) 
-
+  
     svg.append('line')
       .attr('x2', 0).attr('y2', 450)
       .attr('x1', 380).attr('y1', 450)
       .attr('stroke', '#D7984D').attr('stroke-width', 30) 
 
-    let bookX = 600;
-    let randomIndices = this.shuffleBooks(10);
-    for (let i = 0; i < 10; i++) {
-      let bookWidth = Math.floor(Math.random() * (90 - 80)) + 80;
-      let bookHeight = Math.floor(Math.random() * (330 - 290)) + 290;
-      svg.append('image')
-        .attr('href', `src/assets/spines/book${randomIndices[i]}.png`)
-        .attr('class', 'book-spine')
-        .attr('x', bookX + bookWidth).attr('y', 480 - bookHeight)
-        .attr('width', bookWidth).attr('height', bookHeight)
-        .data([books])
-      bookX += bookWidth - 10;
-    }
+    // Populate shelf with books
+    let shelfBooks = new Books();
+    shelfBooks.populate(this.data);
 
-    svg.append('image')
-      .attr('href', 'src/assets/spines/book12.png')
-      .attr('class', 'book-spine')
-      .attr('x', 637).attr('y', 215)
-      .attr('transform', 'rotate(40, 637, 215)')
-      .attr('width', 80).attr('height', 290)
-      .data([books])
+    // Set up searching
+    new Search(shelfBooks);
 
-    d3.selectAll('.book-spine')
-      .on('click', (d) => {
-        console.log(d[d.length - 1])
-        new BookData(d[d.length - 1], d.slice(d.length - 1)).createBook();
-      })
-    
-    svg.append('image')
+    // Cat image
+    const catGroup = svg.append('g').attr('class', 'cat-group')
+
+    catGroup.append('image')
       .attr('href', 'src/assets/cat1.png')
       .attr('class', 'cat')
       .attr('x', -20).attr('y', 290)
       .attr('width', 400).attr('height', 400)
       .attr('transform', 'rotate(-10, -20, 290)')
 
-    const cat = d3.select('.cat')
+    catGroup.append('rect')
+      .attr('x', 25).attr('y', 250)
+      .attr('width', 350).attr('height', 200)
+      .attr('fill', 'transparent')
+      .on('click', () => {
+        this.addClouds();
+        setTimeout(() => document.addEventListener('click', () => {
+          this.removeClouds();
+        }, { once: true }), 300)
+      })
+
+    const cat = d3.select('.cat');
 
     setInterval(() => {
-      setTimeout(() => cat.attr('href', 'src/assets/cat2.png'), 100);
-      setTimeout(() => cat.attr('href', 'src/assets/cat1.png'), 600);
+      cat.attr('href', 'src/assets/cat2.png')
+      setTimeout(() => cat.attr('href', 'src/assets/cat1.png'), 400);
     }, 4000)
+
+    
+  }
+
+  addClouds() {
+    let svg = d3.select('svg');
+    let cloudGroup = svg.append('g').attr('class', 'cloud-group');
+
+    cloudGroup.append('image')
+      .attr('href', 'src/assets/thought_cloud3.png')
+      .attr('class', 'cloud')
+      .attr('x', 340).attr('y', 325)
+      .attr('width', 30).attr('height', 20)
+      
+      setTimeout(() => {
+        cloudGroup.append('image')
+        .attr('href', 'src/assets/thought_cloud2.png')
+        .attr('class', 'cloud')
+        .attr('x', 350).attr('y', 280)
+        .attr('width', 50).attr('height', 30)
+      }, 150)
+      
+      setTimeout(() => {
+        cloudGroup.append('image')
+          .attr('href', 'src/assets/thought_cloud1.png')
+          .attr('class', 'cloud')
+          .attr('x', 110).attr('y', 0)
+          .attr('width', 500).attr('height', 260)
+    }, 300)
+  }
+
+  removeClouds() {
+    d3.select('.cloud-group').remove();
   }
 }

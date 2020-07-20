@@ -1,11 +1,14 @@
-import GenreBooks from './genre_books';
-import GenreVis from './genre_vis';
+import SearchByGenre from './search_by_genre';
+import Bookshelf from './bookshelf';
 
 const loadPage = () => {
-  GenreBooks.create('History')
-    .then(data => {
-      const gv = new GenreVis(data);
-      gv.renderBook();
+  SearchByGenre.create('fantasy')
+    .then(data => {      
+      const bookshelf = new Bookshelf(data);
+      return bookshelf;
+    })
+    .then(bookshelf => {
+      bookshelf.constructBookshelf();
     })
 }
 
