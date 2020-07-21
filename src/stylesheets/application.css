@@ -36,12 +36,17 @@ body {
 }
 
 .current-genre {
+  position: absolute;
+  top: -100%;
+  left: 25%;
   margin-right: 30px;
   font-size: 18px;
   font-family: 'Varela Round';
+  padding-bottom: 15px;
 }
 
 .search {
+  position: relative;
   display: flex;
   align-items: center;
   width: 500px;
@@ -89,8 +94,12 @@ body {
   margin-bottom: 11px;
   font-family: 'Permanent Marker';
   font-weight: 500;
-  line-height: 14px;
+  line-height: 50px;
+  max-width: 100%;
   text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .logo {
