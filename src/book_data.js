@@ -75,13 +75,88 @@ export default class BookData {
     ratingsCount.innerHTML = `Ratings Count: ${this.book.ratingsCount}`;
     ratingContainer.appendChild(ratingsCount);
     pageContent.appendChild(ratingContainer);
-    const graphPage = document.createElement('div');
-    graphPage.classList.add('graph-page');
-    pageContent.appendChild(graphPage);
     page1.appendChild(pageContent);
-    setTimeout(() => {
-      new RatingHistogram().constructGraph(this.book, this.data);
-    }, 1500)
+
+    this.fillPage3();
+  }
+
+  fillPage3() {
+    const page3 = document.querySelector('.book > .page:nth-child(3)');
+    const page3Content = document.createElement('div');
+    page3Content.classList.add('page-3-content');
+    const page3Inner = document.createElement('div');
+    page3Inner.classList.add('page-3-content-inner');
+    const page3Back = document.createElement('div');
+    page3Back.classList.add('page-3-content-back');
+    page3Inner.appendChild(page3Back);
+    page3Content.appendChild(page3Inner);
+    page3.appendChild(page3Content);
+ 
+    new RatingHistogram().constructGraph(this.book, this.data);
+
+    let numLessThan = 0;
+    for (const book of this.data) {
+      if (book.averageRating < this.book.averageRating) {
+        numLessThan++;
+      }
+    }
+    const percentDiv = document.createElement('div');
+    percentDiv.classList.add('percent-text');
+    const bookTitle = document.createElement('div');
+    bookTitle.innerHTML = `${this.book.title}, `
+    const percentText = document.createElement('div');
+    percentText.innerHTML = `with an average rating of ${this.book.averageRating},`;
+    percentDiv.appendChild(bookTitle);
+    percentDiv.appendChild(percentText);
+    page3Back.appendChild(this.pageTurnBack())
+    page3Back.appendChild(percentDiv);
+
+    const page3Front = document.createElement('div');
+    page3Front.classList.add('page-3-content-front');
+    const test = document.createElement('div')
+    page3Front.appendChild(test)
+    page3Front.appendChild(this.pageTurnForward())
+    page3Inner.appendChild(page3Front);
+  }
+
+  pageTurnForward() {
+    const forwardButton = document.createElement('div');
+    forwardButton.classList.add('page-forward-button');
+    forwardButton.addEventListener('click', () => {
+      setTimeout(() => {
+        let back = document.querySelector('.page-3-content-back');
+        back.style.transform = 'rotateY(0deg)';
+        back.style.zIndex = 5;
+        let front = document.querySelector('.page-3-content-front');
+        front.style.transform = 'rotateY(180deg)';
+        front.style.zIndex = 0;
+      }, 550)
+      document.querySelector('.page:nth-of-type(3)').animate([
+        { transform: 'rotateY(180deg)', zIndex: 2 },
+        { transform: 'rotateY(0deg)', zIndex: 999 }
+      ], { duration: 1000, fill: 'forwards' })
+    })
+    return forwardButton;
+  }
+
+  pageTurnBack() {
+    const backButton = document.createElement('div');
+    backButton.classList.add('page-back-button');
+    backButton.addEventListener('click', () => {
+      setTimeout(() => {
+        let back = document.querySelector('.page-3-content-back');
+        back.style.transform = 'rotateY(180deg)';
+        back.style.zIndex = 0;
+        let front = document.querySelector('.page-3-content-front');
+        front.style.transform = 'scaleX(-1)';
+        front.style.zIndex = 5;
+      }, 445)
+      document.querySelector('.page:nth-of-type(3)').animate([
+        { transform: 'rotateY(0deg)', zIndex: 2 },
+        { transform: 'rotateY(180deg)', zIndex: 999 }
+      ], { duration: 1000, fill: 'forwards' })
+    })
+    return backButton;
   }
 
   createStars() {

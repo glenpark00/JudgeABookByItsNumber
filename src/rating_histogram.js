@@ -6,17 +6,28 @@ export default class RatingHistogram {
     if (!graphPage) {
       return null;
     }
-    const width = graphPage.offsetWidth - 100,
-      height = graphPage.offsetHeight - 350;
+    const margin = { top: 60, right: 30, bottom: 50, left: 50 },
+      width = graphPage.offsetWidth - margin.left - margin.right - 100,
+      height = graphPage.offsetHeight - margin.top - margin.bottom - 350;
 
     const books = data.filter(d => d.averageRating);
 
-    const svg = d3.select('.graph-page')
-      .append("svg")
-      .attr("width", width + 20)
-      .attr("height", height + 30)
+    const svg = d3.select('.page-3-content-back')
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
       .attr('x', 0).attr('y', 0)
-      .append("g");
+      .append('g')
+      .attr('transform',
+        `translate(${margin.left}, ${margin.top})`);
+    
+    svg.append('text')
+      .attr('x', width/2).attr('y', -40)
+      .attr('font-family', 'sans-serif').attr('font-size', '16px')
+      .attr('font-weight', '400')
+      .attr('fill', '#777')
+      .attr('text-anchor', 'middle')
+      .text('Average Ratings For This Group of Books');
 
     const x = d3.scaleLinear()
       .domain([
@@ -24,36 +35,56 @@ export default class RatingHistogram {
         d3.max(books, d => d.averageRating) + 0.49
       ])
       .range([0, width]);
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    svg.append('g')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(d3.axisBottom(x))
+      .append('text')
+      .attr('x', width /2).attr('y', 40)
+      .attr('font-family', 'sans-serif').attr('font-size', '13px')
+      .attr('fill', '#777')
+      .attr('text-anchor', 'middle')
+      .text('Average Rating');
 
-    // set the parameters for the histogram
     const histogram = d3.histogram()
-      .value(function (d) { return d.averageRating; })   // I need to give the vector of value
-      .domain(x.domain())  // then the domain of the graphic
-      .thresholds(x.ticks(70)); // then the numbers of bins
+      .value(d => d.averageRating)   
+      .domain(x.domain()) 
+      .thresholds(x.ticks(70)); 
 
-    // And apply this function to books to get the bins
     const bins = histogram(books);
 
-    // Y axis: scale and draw:
     const y = d3.scaleLinear()
       .range([height, 0]);
-    y.domain([0, d3.max(bins, function (d) { return d.length + 10; })]);   // d3.hist has to be called before the Y axis obviously
-    svg.append("g")
-      .call(d3.axisLeft(y));
+    y.domain([0, d3.max(bins, d => d.length + 2)]);  
 
-    // append the bar rectangles to the svg element
-    svg.selectAll("rect")
+    svg.append('g')
+      .call(d3.axisLeft(y))
+      .append('text')
+      .attr('x', -(height + margin.left + margin.right)/2).attr('y', -35)
+      .attr('font-family', 'sans-serif').attr('font-size', '13px')
+      .attr('fill', '#777')
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .text('Frequency');
+      
+    svg.selectAll('rect')
       .data(bins)
       .enter()
-      .append("rect")
-      .attr("x", 1)
-      .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
-      .attr("width", width/10)
-      .attr("height", function (d) { return height - y(d.length); })
-      .style("fill", "#69b3a2")
+      .append('rect')
+      .attr('x', d => x(d.x0)).attr('y', d => y(0))
+      .attr('width', width/10)
+      .attr('height', d => height - y(0))
+      .style('fill', d => {
+        if (book.averageRating >= d.x0 && book.averageRating < d.x1) {
+          return 'orange';
+        } else {
+          return '#69b3a2'
+        }
+      })
+      .transition()
+      .duration(500)
+      .attr("y", d => y(d.length))
+      .attr("height", d => height - y(d.length))
+      .delay((d, i) => i * 30)
+      
   }
-  
 }
