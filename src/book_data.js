@@ -83,7 +83,6 @@ export default class BookData {
     ratingContainer.appendChild(ratingsCount);
     pageContent.appendChild(ratingContainer);
     page1.appendChild(pageContent);
-
     this.fillPage3();
     this.fillPage2();
   }
