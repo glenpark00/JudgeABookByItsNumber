@@ -14,7 +14,6 @@ export default class SearchByTitle {
     await axios.all(requests)
       .then(axios.spread((...response) => {
         if (response) {
-          console.log(response)
           response.map(res => {
             const items = res.data.items || [];
             this.books = this.books.concat(items.map(item => item.volumeInfo));
