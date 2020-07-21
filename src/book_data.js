@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
+import PopularityHistogram from './popularity_histogram';
 import RatingHistogram from './rating_histogram';
+import PageCountBoxplot from './page_count_boxplot';
 
 export default class BookData {
   constructor(book, data) {
@@ -56,6 +58,10 @@ export default class BookData {
     author.classList.add('book-info-author');
     author.innerHTML = `by ${this.book.authors ? this.book.authors[0] : 'Unknown'}`;
     bookHeaders.appendChild(author);
+    const link = document.createElement('a');
+    link.href = this.book.canonicalVolumeLink;
+    link.innerHTML = 'Link to Google Books Page';
+    bookHeaders.appendChild(link);
     bookInfo.appendChild(bookHeaders);
     const desc = document.createElement('p');
     desc.innerHTML = this.book.description;
@@ -78,6 +84,7 @@ export default class BookData {
     page1.appendChild(pageContent);
 
     this.fillPage3();
+    this.fillPage2();
   }
 
   fillPage3() {
@@ -94,29 +101,64 @@ export default class BookData {
  
     new RatingHistogram().constructGraph(this.book, this.data);
 
-    let numLessThan = 0;
+    let numLessThanRating = 0;
     for (const book of this.data) {
       if (book.averageRating < this.book.averageRating) {
-        numLessThan++;
+        numLessThanRating++;
       }
     }
-    const percentDiv = document.createElement('div');
-    percentDiv.classList.add('percent-text');
-    const bookTitle = document.createElement('div');
-    bookTitle.innerHTML = `${this.book.title}, `
-    const percentText = document.createElement('div');
-    percentText.innerHTML = `with an average rating of ${this.book.averageRating},`;
-    percentDiv.appendChild(bookTitle);
-    percentDiv.appendChild(percentText);
+    const ratingDiv = document.createElement('div');
+    ratingDiv.classList.add('rating-text');
+    const ratingTextRating = document.createElement('div');
+    ratingTextRating.innerHTML = `${this.book.title} has an average rating of ${this.book.averageRating}, which is higher than ${((numLessThanRating / this.data.length) * 100).toFixed(2)}% of the books in this sample.`;
+    ratingDiv.appendChild(ratingTextRating);
+    page3Back.appendChild(ratingDiv);
     page3Back.appendChild(this.pageTurnBack())
-    page3Back.appendChild(percentDiv);
 
     const page3Front = document.createElement('div');
     page3Front.classList.add('page-3-content-front');
-    const test = document.createElement('div')
-    page3Front.appendChild(test)
-    page3Front.appendChild(this.pageTurnForward())
     page3Inner.appendChild(page3Front);
+
+    new PopularityHistogram().constructGraph(this.book, this.data);
+
+    let numLessThanPop = 0;
+    for (const book of this.data) {
+      if (book.popularityScore < this.book.popularityScore) {
+        numLessThanPop++;
+      }
+    }
+    const popularityDiv = document.createElement('div');
+    popularityDiv.classList.add('popularity-text');
+    const percentTextPop = document.createElement('div');
+    percentTextPop.innerHTML = `${this.book.title} has a popularity score of ${this.book.popularityScore}, which is higher than ${((numLessThanPop / this.data.length) * 100).toFixed(2)}% of the books in this sample. Popularity score is defined as the total number of stars a book has received from all of its reviews.`;
+    const note = document.createElement('div');
+    note.innerHTML = "Note: If you don't see a orange bar in the graph, that means this book was such an outlier that it wasn't included in the graph. Quite the must-read!"
+    popularityDiv.appendChild(percentTextPop);
+    popularityDiv.appendChild(note);
+    page3Front.appendChild(popularityDiv);
+    page3Front.appendChild(this.pageTurnForward());
+  }
+
+  fillPage2() {
+    const page2 = document.querySelector('.book > .page:nth-child(2)');
+    const page2Content = document.createElement('div');
+    page2Content.classList.add('page-2-content');
+    const page2Inner = document.createElement('div');
+    page2Inner.classList.add('page-2-content-inner');
+    const page2Front = document.createElement('div');
+    page2Front.classList.add('page-2-content-front');
+    page2Inner.appendChild(page2Front);
+    page2Content.appendChild(page2Inner);
+    page2.appendChild(page2Content);
+
+    new PageCountBoxplot().constructGraph(this.book, this.data);
+
+    const pageCountDiv = document.createElement('div');
+    pageCountDiv.classList.add('page-count-text');
+    const pageCountTextPageCount = document.createElement('div');
+    pageCountTextPageCount.innerHTML = `${this.book.title} has ${this.book.pageCount} pages, which makes it a ${this.lengthGroup(this.book.pageCount)}-read compared to the other books in this sample.`;
+    pageCountDiv.appendChild(pageCountTextPageCount);
+    page2Front.appendChild(pageCountDiv);
   }
 
   pageTurnForward() {
@@ -159,11 +201,28 @@ export default class BookData {
     return backButton;
   }
 
+  lengthGroup(pageCount) {
+    let sortedByPageCounts = this.data.sort((a, b) => a.pageCount > b.pageCount ? 1 : -1).map(d => d.pageCount);
+    let firstThird = Math.floor(sortedByPageCounts.length * 0.33);
+    let secondThird = Math.floor(sortedByPageCounts.length * 0.66);
+    let short = sortedByPageCounts[firstThird];
+    let medium = sortedByPageCounts[secondThird];
+    if (pageCount < short) {
+      return 'short';
+    }
+    else if (pageCount >= short && pageCount < medium) {
+      return 'medium';
+    } else {
+      return 'long';
+    }
+  }
+
   createStars() {
     const rating = this.book.averageRating;
     const num = Math.floor(rating);
     const decimal = rating - num;
     const starsContainer =  document.createElement('div');
+    starsContainer.classList.add('stars-container')
     for (let i = 0; i < num; i++) {
       const filledStar = document.createElement('i');
       filledStar.classList.add('fa', 'fa-star');

@@ -50,7 +50,10 @@ body {
 }
 
 .hover-book {
-  margin-bottom: 10px;
+  margin-bottom: 11px;
+  font-family: 'Permanent Marker';
+  font-weight: 500;
+  line-height: 14px;
 }
 
 .logo {

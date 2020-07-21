@@ -8,9 +8,9 @@ export default class RatingHistogram {
     }
     const margin = { top: 60, right: 30, bottom: 50, left: 50 },
       width = graphPage.offsetWidth - margin.left - margin.right - 100,
-      height = graphPage.offsetHeight - margin.top - margin.bottom - 350;
+      height = graphPage.offsetHeight - margin.top - margin.bottom - 200;
 
-    const books = data.filter(d => d.averageRating);
+    const books = data.filter(d => d.popularityScore > 0);
 
     const svg = d3.select('.page-3-content-back')
       .append('svg')
@@ -22,12 +22,12 @@ export default class RatingHistogram {
         `translate(${margin.left}, ${margin.top})`);
     
     svg.append('text')
-      .attr('x', width/2).attr('y', -40)
-      .attr('font-family', 'sans-serif').attr('font-size', '16px')
+      .attr('x', width/2).attr('y', -20)
+      .attr('font-family', 'sans-serif').attr('font-size', '15px')
       .attr('font-weight', '400')
       .attr('fill', '#777')
       .attr('text-anchor', 'middle')
-      .text('Average Ratings For This Group of Books');
+      .text('Average Ratings For This Sample of Books');
 
     const x = d3.scaleLinear()
       .domain([
@@ -59,7 +59,7 @@ export default class RatingHistogram {
     svg.append('g')
       .call(d3.axisLeft(y))
       .append('text')
-      .attr('x', -(height + margin.left + margin.right)/2).attr('y', -35)
+      .attr('x', -(height)/2).attr('y', -35)
       .attr('font-family', 'sans-serif').attr('font-size', '13px')
       .attr('fill', '#777')
       .attr('transform', 'rotate(-90)')
@@ -77,10 +77,11 @@ export default class RatingHistogram {
         if (book.averageRating >= d.x0 && book.averageRating < d.x1) {
           return 'orange';
         } else {
-          return '#69b3a2'
+          return '#9C528B'
         }
       })
       .transition()
+      .delay(1500)
       .duration(500)
       .attr("y", d => y(d.length))
       .attr("height", d => height - y(d.length))

@@ -3,29 +3,37 @@ import Book from './book';
 
 export default class Books {
   populate(data) {
-    let books = data.books;
     let svg = d3.select('svg');
     
-    if (books.length < 1) {
+    if (data.books.length < 1) {
       svg.append('text')
-        .attr('x', 600).attr('y', 300)
-        .text('No books found for that genre. Try another one!')
+      .attr('x', 700).attr('y', 300)
+      .text('No books found for that genre. Try another one!')
+      .attr('font-family', 'sans-serif').attr('font-size', '20px')
+      .attr('font-weight', '400')
+      .attr('fill', '#eee')
       return;
     }
 
-    let count = 0;
-    for (const book of books) {
-      if (book.averageRating) {
-        count++;
+    let books = [];
+
+    // for (const book of books) {
+    //   if (book.averageRating) {
+    //     book.popularityScore = book.averageRating * book.ratingsCount
+    //   } else {
+    //     book.popularityScore = 0;
+    //   }
+    // }
+
+    data.books.forEach(d => {
+      let popularityScore = 0;
+      if (d.averageRating) {
+        popularityScore = d.averageRating * d.ratingsCount;
       }
-    }
+      books.push(Object.assign({}, d, { popularityScore }))
+    })
 
-    books = books.filter(book => book.averageRating && book.averageRating > -1)
-    books.sort((a, b) => (a.averageRating * a.ratingsCount) > (b.averageRating * b.ratingsCount ) ? -1 : 1)
-
-    console.log(count);
-    console.log(books);
-    
+    books = books.sort((a, b) => b.popularityScore - a.popularityScore);
 
     let jumbledBest = books.slice(0, 80);
     for (let i = jumbledBest.length - 1; i > 0; i--) {
@@ -34,8 +42,6 @@ export default class Books {
       jumbledBest[i] = jumbledBest[j];
       jumbledBest[j] = temp;
     }
-
-    console.log(jumbledBest.slice(0, 28))
 
     let group = svg.append('g').attr('class', 'books-group');
 

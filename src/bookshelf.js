@@ -70,7 +70,20 @@ export default class Bookshelf {
     new Search(shelfBooks);
 
     // Cat image
-    const catGroup = svg.append('g').attr('class', 'cat-group')
+    const catGroup = svg.append('g').attr('class', 'cat-group');
+
+    catGroup.append("path")
+      // .attr('x', 100).attr('y', 250)
+      .attr('id', 'curve')
+      .attr('d', 'M 25,320 A 200,110 0, 0,1 400,300')
+      .attr('fill', 'transparent')
+
+    catGroup.append('text')
+      .attr('x', 35).attr('y', 250)
+      .attr("stroke", "black")
+      .append("textPath")
+      .attr("xlink:href", '#curve')
+      .text('Click me!')
 
     catGroup.append('image')
       .attr('href', 'src/assets/cat1.png')
@@ -82,6 +95,7 @@ export default class Bookshelf {
     catGroup.append('rect')
       .attr('x', 25).attr('y', 250)
       .attr('width', 350).attr('height', 200)
+      .attr('class', 'cat-box')
       .attr('fill', 'transparent')
       .on('click', () => {
         this.addClouds();
@@ -96,13 +110,12 @@ export default class Bookshelf {
       cat.attr('href', 'src/assets/cat2.png')
       setTimeout(() => cat.attr('href', 'src/assets/cat1.png'), 400);
     }, 4000)
-
-    
   }
 
   addClouds() {
     let svg = d3.select('svg');
-    let cloudGroup = svg.append('g').attr('class', 'cloud-group');
+    let cloudGroup = svg.append('g').attr('class', 'cloud-group')
+      .on('click', () => d3.event.stopPropagation())
 
     cloudGroup.append('image')
       .attr('href', 'src/assets/thought_cloud3.png')
@@ -124,6 +137,11 @@ export default class Bookshelf {
           .attr('class', 'cloud')
           .attr('x', 110).attr('y', 0)
           .attr('width', 500).attr('height', 260)
+          
+        cloudGroup.append('text')
+          .attr('class', 'cloud-text')
+          .attr('x', 200).attr('y', 150)
+          .text('stuff')
     }, 300)
   }
 
