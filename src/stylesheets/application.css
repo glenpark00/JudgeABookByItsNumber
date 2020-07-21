@@ -23,6 +23,7 @@ body {
   height: 140px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   z-index: 1;
   /* animation: slowHeader 4s forwards; */
 }
@@ -31,14 +32,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+
+.current-genre {
+  margin-right: 30px;
+  font-size: 18px;
+  font-family: 'Varela Round';
 }
 
 .search {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   width: 500px;
   height: 50%;
-  margin-top: 50px;
+  position: relative;
 }
 
 .search-bar {
@@ -46,14 +54,43 @@ body {
   height: 25%;
   font-size: 18px;
   padding: 7px 9px;
+  border-radius: 10px;
+  border: 2px solid burlywood;
+  font-family: Nunito;
+}
+
+.search-bar:focus {
+  outline: darkgoldenrod;
+}
+
+.search-button {
+  width: 120px;
+  margin-left: 8px;
+  padding: 6px 5px;
   border-radius: 3px;
+  border: 1px;
+  cursor: pointer;
+  background-color: darkred;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 400;
+  font-family: sans-serif;
+}
+
+.search > i {
+  position: absolute;
+  right: 115px;
 }
 
 .hover-book {
+  position: absolute;
+  top: 62px;
+  left: 5px;
   margin-bottom: 11px;
   font-family: 'Permanent Marker';
   font-weight: 500;
   line-height: 14px;
+  text-align: center;
 }
 
 .logo {
@@ -80,5 +117,11 @@ svg {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.cloud-next {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 }
 

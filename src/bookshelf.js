@@ -81,6 +81,7 @@ export default class Bookshelf {
     catGroup.append('text')
       .attr('x', 35).attr('y', 250)
       .attr("stroke", "black")
+      .attr('font-family', 'Varela Round')
       .append("textPath")
       .attr("xlink:href", '#curve')
       .text('Click me!')
@@ -137,11 +138,85 @@ export default class Bookshelf {
           .attr('class', 'cloud')
           .attr('x', 110).attr('y', 0)
           .attr('width', 500).attr('height', 260)
+
+      const firstTextGroup = cloudGroup.append('g').attr('class', 'first-text-group');
           
-        cloudGroup.append('text')
-          .attr('class', 'cloud-text')
-          .attr('x', 200).attr('y', 150)
-          .text('stuff')
+        firstTextGroup.append('text')
+          .attr('x', 255).attr('y', 70)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text('Welcome to JudgeABookByItsCover!')
+
+        firstTextGroup.append('text')
+          .attr('x', 215).attr('y', 105)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text('The goal of this site is to hook you up with your')
+
+        firstTextGroup.append('text')
+          .attr('x', 200).attr('y', 125)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text('next page-turner using the power of simple statistics.')
+
+        firstTextGroup.append('text')
+          .attr('x', 175).attr('y', 160)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text('To get started, type your favorite genre into the search bar,')
+
+        firstTextGroup.append('text')
+          .attr('x', 185).attr('y', 180)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text(' and our librarians will stock the shelves with some popular ')
+
+        firstTextGroup.append('text')
+          .attr('x', 235).attr('y', 200)
+          .attr('font-size', '13px')
+          .attr('font-family', 'Varela Round')
+          .text('books from a random sample of results.')
+
+        firstTextGroup.append('image')
+          .attr('class', 'cloud-next')
+          .attr('href', 'src/assets/triangle_right.svg')
+          .attr('opacity', '0.85')
+          .attr('x', 350).attr('y', 220)
+          .on('click', () => {
+            firstTextGroup.remove();
+            const secondTextGroup = cloudGroup.append('g');
+            secondTextGroup.append('text')
+  
+              .attr('x', 255).attr('y', 70)
+              .attr('font-size', '13px')
+              .attr('font-family', 'Varela Round')
+              .text('Click a book on the shelf to view info')
+
+            secondTextGroup.append('text')
+  
+              .attr('x', 205).attr('y', 90)
+              .attr('font-size', '13px')
+              .attr('font-family', 'Varela Round')
+              .text('and statistics about the book. If you like what you')
+
+            secondTextGroup.append('text')
+  
+              .attr('x', 195).attr('y', 110)
+              .attr('font-size', '13px')
+              .attr('font-family', 'Varela Round')
+              .text('see, click on the Google Book link to look deeper into it.')
+
+            secondTextGroup.append('text')
+  
+              .attr('x', 280).attr('y', 170)
+              .attr('font-size', '13px')
+              .attr('font-family', 'Varela Round')
+              .text('Thanks for stopping by!')
+
+            setTimeout(() => cloudGroup.on('click', () => {
+              cloudGroup.remove();
+            }), 100)
+          })
     }, 300)
   }
 

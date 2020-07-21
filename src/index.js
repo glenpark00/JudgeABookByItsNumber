@@ -3,7 +3,8 @@ import Bookshelf from './bookshelf';
 
 const loadPage = () => {
   SearchByGenre.create('fantasy')
-    .then(data => {      
+    .then(data => { 
+      document.querySelector('.current-genre').innerHTML = 'Current Genre: Fantasy'     
       const bookshelf = new Bookshelf(data);
       return bookshelf;
     })

@@ -60,6 +60,7 @@ export default class BookData {
     bookHeaders.appendChild(author);
     const link = document.createElement('a');
     link.href = this.book.canonicalVolumeLink;
+    link.target = '_blank';
     link.innerHTML = 'Link to Google Books Page';
     bookHeaders.appendChild(link);
     bookInfo.appendChild(bookHeaders);

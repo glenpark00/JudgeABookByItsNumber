@@ -8,7 +8,9 @@ export default class Search {
 
   handleSearch() {
     document.querySelector('.search-button')
-      .addEventListener('click', () => this.performSearch())
+      .addEventListener('click', () => {
+        this.performSearch();
+      })
   }
 
   performSearch() {
@@ -25,6 +27,7 @@ export default class Search {
     }).join('');
     SearchByGenre.create(term)
       .then(data => {
+        document.querySelector('.current-genre').innerHTML = `Current Genre: ${genre}`
         this.shelfBooks.clearBooks();
         this.shelfBooks.populate(data);
       })
