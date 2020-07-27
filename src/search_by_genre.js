@@ -8,7 +8,7 @@ export default class SearchByTitle {
 
   async fetchBook() {
     let requests = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 9; i++) {
       requests.push(axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${this.genre}&maxResults=40&startIndex=${i * 40}`));
     }
     await axios.all(requests)

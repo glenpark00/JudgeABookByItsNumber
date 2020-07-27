@@ -7,12 +7,16 @@ export default class Books {
     
     if (data.books.length < 1) {
       svg.append('text')
+      .attr('class', 'no-books-text')
       .attr('x', 700).attr('y', 300)
       .text('No books found for that genre. Try another one!')
       .attr('font-family', 'sans-serif').attr('font-size', '20px')
       .attr('font-weight', '400')
       .attr('fill', '#eee')
       return;
+    } else {
+      let text = d3.select('.no-books-text')
+      if (text) text.remove();
     }
 
     let books = [];
