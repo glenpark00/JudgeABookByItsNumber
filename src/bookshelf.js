@@ -145,7 +145,7 @@ export default class Bookshelf {
           .attr('x', 235).attr('y', 70)
           .attr('font-size', '13px')
           .attr('font-family', 'Varela Round')
-          .text('Welcome to JudgeABookByItsCover!')
+          .text('Welcome to JudgeABookByItsNumber!')
 
         firstTextGroup.append('text')
           .attr('x', 195).attr('y', 105)
