@@ -14,7 +14,7 @@ export default class PopularityHistogram {
     const l = books.length;
     const low = Math.round(l * 0.05);
     const high = l - low;
-    books = books.slice(low, high);
+    books = books.slice(0, high);
 
     const svg = d3.select('.page-3-content-front')
       .append('svg')
