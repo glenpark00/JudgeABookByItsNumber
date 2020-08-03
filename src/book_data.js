@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 import PopularityHistogram from './popularity_histogram';
 import RatingHistogram from './rating_histogram';
 import PageCountBoxplot from './page_count_boxplot';

@@ -258,6 +258,7 @@ i.fa.fa-star.partial::after {
   background-image: url('../assets/arrow_right.svg');
   margin-top: auto;
   align-self: flex-end;
+  cursor: pointer;
 }
 
 .page-back-button {
@@ -266,6 +267,7 @@ i.fa.fa-star.partial::after {
   background-image: url('../assets/arrow_left.svg');
   margin-top: auto;
   align-self: flex-start;
+  cursor: pointer;
 }
 
 .page-2-content {
@@ -342,4 +344,8 @@ i.fa.fa-star.partial::after {
 
 .stars-container {
   margin: 10px 0;
+}
+
+i.fab.fa-github-square {
+  font-size: 30px;
 }

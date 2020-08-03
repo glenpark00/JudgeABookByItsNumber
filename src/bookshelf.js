@@ -204,10 +204,34 @@ export default class Bookshelf {
               .text('see, click on the Google Book link to look deeper into it.')
 
             secondTextGroup.append('text')
-              .attr('x', 260).attr('y', 170)
+              .attr('x', 260).attr('y', 150)
               .attr('font-size', '13px')
               .attr('font-family', 'Varela Round')
               .text('Thanks for stopping by!')
+
+            secondTextGroup.append('image')
+              .attr('class', 'linkedin-icon')
+              .attr('x', 305).attr('y', 180)
+              .attr('width', '25px')
+              .attr('height', '25px')
+              .attr('cursor', 'pointer')
+              .attr('href', 'src/assets/linkedin.svg')
+              .on('click', () => {
+                d3.event.stopPropagation();
+                window.open('https://www.linkedin.com/in/glen-park/');
+              })
+
+            secondTextGroup.append('image')
+              .attr('class', 'linkedin-icon')
+              .attr('x', 355).attr('y', 180)
+              .attr('width', '25px')
+              .attr('height', '25px')
+              .attr('cursor', 'pointer')
+              .attr('href', 'src/assets/github.svg')
+              .on('click', () => {
+                d3.event.stopPropagation();
+                window.open('https://github.com/glenpark00');
+              })
 
             setTimeout(() => cloudGroup.on('click', () => {
               cloudGroup.remove();
