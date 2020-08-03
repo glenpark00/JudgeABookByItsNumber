@@ -40,6 +40,14 @@ export default class BookData {
   }
 
   fillBook() {
+    setTimeout(() => {
+      this.fillPage1();
+    }, 1000)
+    this.fillPage3();
+    this.fillPage2();
+  }
+
+  fillPage1() {
     const page1 = document.querySelector('.book > .first');
     const pageContent = document.createElement('div');
     pageContent.classList.add('page-content');
@@ -82,8 +90,6 @@ export default class BookData {
     ratingContainer.appendChild(ratingsCount);
     pageContent.appendChild(ratingContainer);
     page1.appendChild(pageContent);
-    this.fillPage3();
-    this.fillPage2();
   }
 
   fillPage3() {
