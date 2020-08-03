@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import BookData from './book_data';
+import BookData from '../data/book_data';
 
 export default class Book {
   constructor(book, xPos, yPos, bookWidth, bookHeight, data, group, imageNumber) {

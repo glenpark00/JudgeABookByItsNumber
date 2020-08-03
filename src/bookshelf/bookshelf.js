@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import Books from './books';
-import Search from './search';
+import Search from '../search/search';
 
 export default class Bookshelf {
   constructor(data) {

@@ -1,5 +1,5 @@
-import SearchByGenre from './search_by_genre';
-import Bookshelf from './bookshelf';
+import SearchByGenre from './search/search_by_genre';
+import Bookshelf from './bookshelf/bookshelf';
 
 const loadPage = () => {
   SearchByGenre.create('fantasy')
