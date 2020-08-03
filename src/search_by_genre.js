@@ -4,6 +4,7 @@ export default class SearchByTitle {
   constructor(genre) {
     this.genre = genre;
     this.books = [];
+    this.error = null;
   }
 
   async fetchBook() {
@@ -20,6 +21,7 @@ export default class SearchByTitle {
           })
         }
       }))
+      .catch(() => this.error = 'Too many requests made to the Google Books API, please wait before trying again')
   }
 
   static async create(title) {

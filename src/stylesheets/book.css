@@ -152,8 +152,8 @@
 .book-headers > h1 {
   font-size: 25px;
   margin-top: 0;
-  max-height: 160px;
-  overflow: hidden;
+  max-height: 130px;
+  overflow-y: auto;
 }
 
 .book-info-author {

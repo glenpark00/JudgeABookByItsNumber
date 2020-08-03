@@ -4,38 +4,38 @@ import Book from './book';
 export default class Books {
   populate(data) {
     let svg = d3.select('svg');
-    
-    if (data.books.length < 1) {
-      svg.append('text')
-      .attr('class', 'no-books-text')
-      .attr('x', 700).attr('y', 300)
-      .text('No books found for that genre. Try another one!')
-      .attr('font-family', 'sans-serif').attr('font-size', '20px')
-      .attr('font-weight', '400')
-      .attr('fill', '#eee')
-      return;
-    } else {
-      let text = d3.select('.no-books-text')
-      if (text) text.remove();
-    }
 
     let books = [];
-
-    // for (const book of books) {
-    //   if (book.averageRating) {
-    //     book.popularityScore = book.averageRating * book.ratingsCount
-    //   } else {
-    //     book.popularityScore = 0;
-    //   }
-    // }
 
     data.books.forEach(d => {
       let popularityScore = 0;
       if (d.averageRating) {
         popularityScore = d.averageRating * d.ratingsCount;
+        books.push(Object.assign({}, d, { popularityScore }))
       }
-      books.push(Object.assign({}, d, { popularityScore }))
     })
+
+    if (data.error) {
+      svg.append('text')
+        .attr('class', 'no-books-text')
+        .attr('x', 600).attr('y', 300)
+        .text(data.error)
+        .attr('font-family', 'sans-serif').attr('font-size', '16px')
+        .attr('font-weight', '400')
+        .attr('fill', '#eee')
+    } else if (books.length < 1) {
+      svg.append('text')
+        .attr('class', 'no-books-text')
+        .attr('x', 700).attr('y', 300)
+        .text('No books found for that genre. Try another one!')
+        .attr('font-family', 'sans-serif').attr('font-size', '20px')
+        .attr('font-weight', '400')
+        .attr('fill', '#eee')
+      return;
+    } else {
+      let text = d3.select('.no-books-text')
+      if (text) text.remove();
+    }
 
     books = books.sort((a, b) => b.popularityScore - a.popularityScore);
 
@@ -50,8 +50,10 @@ export default class Books {
     let group = svg.append('g').attr('class', 'books-group');
 
     // Fill middle shelf with books
-    new Book(books[0], 557, 505, 80, 290, books, group, 12);
-    d3.select('.books-group > image:first-child').attr('transform', 'rotate(40, 637, 215)')
+    if (books[0]) {
+      new Book(books[0], 557, 505, 80, 290, books, group, 12);
+      d3.select('.books-group > image:first-child').attr('transform', 'rotate(40, 637, 215)')
+    }
 
     let bookMidX = 600;
     let randomMidIndices = this.shuffleBooks(11);
