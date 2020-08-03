@@ -163,7 +163,7 @@
 
 .page-content > p {
   font-size: 12px;
-  max-height: 100px;
+  max-height: 300px;
   overflow-y: auto;
 }
 
