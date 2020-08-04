@@ -24,7 +24,8 @@ Because the Google Books API is rather limited in how you can search for books a
 
 Here is the code for the popularity histogram (popularity being defined as the number of reviews multiplied by the average rating), which relies on D3.js to set up the axes and the parameters of the histogram, and animates the bars when the graph is first rendered to pop up one by one. 
 
-``` constructGraph(book, data) {
+``` 
+constructGraph(book, data) {
     const graphPage = document.querySelector('.first');
     if (!graphPage) {
       return null;
@@ -117,7 +118,8 @@ Here is the code for the popularity histogram (popularity being defined as the n
   
 I unfortunately could not perform a simple random sample of books for a given genre due to the limitations of the API, but I was able to take 400 data points using multiple axios calls, as the API only allows 40 results at a time. Too many calls to the API in quick succession leads to a 429 error, which I've accounted for in the code below: 
 
-``` async fetchBook() {
+``` 
+async fetchBook() {
     let requests = [];
     for (let i = 0; i < 10; i++) {
       requests.push(axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${this.genre}&maxResults=40&startIndex=${i * 40}`));
@@ -135,4 +137,10 @@ I unfortunately could not perform a simple random sample of books for a given ge
   }
 ```
 
+## To-Do
+
 In the future, I plan to find or scrape (and possibly clean) a dataset of books with more interesting data for statistical analysis. I'm planning on doing this using a PostgreSQL server I host myself using Express.js. This'll allow me to hopefully expand my search to include specific books, dates, and authors, and add more plots with fun statistics.
+
+## Contact
+
+[LinkedIn](https://www.linkedin.com/in/glen-park/)
