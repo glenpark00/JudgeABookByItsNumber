@@ -1,39 +1,50 @@
-import * as d3 from 'd3';
-import Book from './book';
+import * as d3 from "d3";
+import Book from "./book";
 
 export default class Books {
+  constructor(widthScale, heightScale) {
+    self.widthScale = widthScale;
+    self.heightScale = heightScale;
+  }
+
   populate(data) {
-    let svg = d3.select('svg');
+    let svg = d3.select("svg");
 
     let books = [];
 
-    data.books.forEach(d => {
+    data.books.forEach((d) => {
       let popularityScore = 0;
       if (d.averageRating) {
         popularityScore = d.averageRating * d.ratingsCount;
-        books.push(Object.assign({}, d, { popularityScore }))
+        books.push(Object.assign({}, d, { popularityScore }));
       }
-    })
+    });
 
     if (data.error) {
-      svg.append('text')
-        .attr('class', 'no-books-text')
-        .attr('x', 600).attr('y', 300)
+      svg
+        .append("text")
+        .attr("class", "no-books-text")
+        .attr("x", 600 * widthScale)
+        .attr("y", 300 * heightScale)
         .text(data.error)
-        .attr('font-family', 'sans-serif').attr('font-size', '16px')
-        .attr('font-weight', '400')
-        .attr('fill', '#eee')
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "16px")
+        .attr("font-weight", "400")
+        .attr("fill", "#eee");
     } else if (books.length < 1) {
-      svg.append('text')
-        .attr('class', 'no-books-text')
-        .attr('x', 700).attr('y', 300)
-        .text('No books found for that genre. Try another one!')
-        .attr('font-family', 'sans-serif').attr('font-size', '20px')
-        .attr('font-weight', '400')
-        .attr('fill', '#eee')
+      svg
+        .append("text")
+        .attr("class", "no-books-text")
+        .attr("x", 700 * widthScale)
+        .attr("y", 300 * heightScale)
+        .text("No books found for that genre. Try another one!")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("font-weight", "400")
+        .attr("fill", "#eee");
       return;
     } else {
-      let text = d3.select('.no-books-text')
+      let text = d3.select(".no-books-text");
       if (text) text.remove();
     }
 
@@ -47,46 +58,85 @@ export default class Books {
       jumbledBest[j] = temp;
     }
 
-    let group = svg.append('g').attr('class', 'books-group');
+    let group = svg.append("g").attr("class", "books-group");
 
     // Fill middle shelf with books
     if (books[0]) {
-      new Book(books[0], 557, 505, 80, 290, books, group, 12);
-      d3.select('.books-group > image:first-child').attr('transform', 'rotate(40, 637, 215)')
+      new Book(
+        books[0],
+        557 * widthScale,
+        505 * heightScale,
+        80 * widthScale,
+        290 * heightScale,
+        books,
+        group,
+        12
+      );
+      d3.select(".books-group > image:first-child").attr(
+        "transform",
+        `rotate(40, ${637 * widthScale}, ${215 * heightScale})`
+      );
     }
 
-    let bookMidX = 600;
+    let bookMidX = 600 * widthScale;
     let randomMidIndices = this.shuffleBooks(11);
     for (const book of jumbledBest.slice(1, 11)) {
-      let bookWidth = Math.floor(Math.random() * 10) + 80;
-      let bookHeight = Math.floor(Math.random() * 30) + 300;
-      new Book(book, bookMidX, 480, bookWidth, bookHeight, books, group, randomMidIndices.shift());
+      let bookWidth = (Math.floor(Math.random() * 10) + 80) * widthScale;
+      let bookHeight = (Math.floor(Math.random() * 30) + 300) * heightScale;
+      new Book(
+        book,
+        bookMidX,
+        480 * heightScale,
+        bookWidth,
+        bookHeight,
+        books,
+        group,
+        randomMidIndices.shift()
+      );
       bookMidX += bookWidth - 2;
     }
 
     // Fill lower shelf with books
-    let bookLowerX = 425;
+    let bookLowerX = 425 * widthScale;
     let randomLowerIndices = this.shuffleBooks(15);
     for (const book of jumbledBest.slice(11, 24)) {
-      let bookWidth = Math.floor(Math.random() * 10) + 80;
-      let bookHeight = Math.floor(Math.random() * 30) + 300;
-      new Book(book, bookLowerX, 875, bookWidth, bookHeight, books, group, randomLowerIndices.shift());
+      let bookWidth = (Math.floor(Math.random() * 10) + 80) * widthScale;
+      let bookHeight = (Math.floor(Math.random() * 30) + 300) * heightScale;
+      new Book(
+        book,
+        bookLowerX,
+        875 * heightScale,
+        bookWidth,
+        bookHeight,
+        books,
+        group,
+        randomLowerIndices.shift()
+      );
       bookLowerX += bookWidth - 5;
     }
 
     // Fill left shelf with books
-    let bookLeftX = -90;
+    let bookLeftX = -90 * widthScale;
     let randomLeftIndices = this.shuffleBooks(15);
     for (const book of jumbledBest.slice(24, 29)) {
-      let bookWidth = Math.floor(Math.random() * 10) + 70;
-      let bookHeight = Math.floor(Math.random() * 30) + 300;
-      new Book(book, bookLeftX, 875, bookWidth, bookHeight, books, group, randomLeftIndices.shift());
+      let bookWidth = (Math.floor(Math.random() * 10) + 70) * widthScale;
+      let bookHeight = (Math.floor(Math.random() * 30) + 300) * heightScale;
+      new Book(
+        book,
+        bookLeftX,
+        875 * heightScale,
+        bookWidth,
+        bookHeight,
+        books,
+        group,
+        randomLeftIndices.shift()
+      );
       bookLeftX += bookWidth - 3;
     }
   }
 
   clearBooks() {
-    d3.select('.books-group').remove();
+    d3.select(".books-group").remove();
   }
 
   shuffleBooks(length) {
@@ -97,6 +147,6 @@ export default class Books {
       indices[i] = indices[j];
       indices[j] = temp;
     }
-    return indices.map(i => i + 1);
+    return indices.map((i) => i + 1);
   }
 }
